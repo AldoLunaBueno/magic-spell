@@ -1,5 +1,11 @@
 import ffmpeg
 
+input_file = "fw-3x05.mkv"
+language_code = "eng"
+audio_codec = "acc"
+name, dot, extension = input_file.rpartition(".")
+output_file = f"{language_code}_{name}.{extension}"
+
 def get_audio_stream_index_by_language(input_file, language_code):
     # Obtener la información de los streams
     probe = ffmpeg.probe(input_file)
@@ -10,13 +16,6 @@ def get_audio_stream_index_by_language(input_file, language_code):
         if 'tags' in stream and 'language' in stream['tags'] and stream['tags']['language'] == language_code:
             return stream['index']
     return None
-
-input_file = "cut_input.mkv"
-language_code = "eng"
-audio_codec = "acc"
-name, dot, extension = input_file.rpartition(".")
-output_file = f"{language_code}_{name}.{extension}"
-
 
 # Obtener el índice del stream de audio en inglés
 audio_stream_index = get_audio_stream_index_by_language(input_file, language_code)
@@ -35,5 +34,5 @@ input = ffmpeg.input(input_file)
         vcodec="copy",
         acodec="aac",
         map=f"0:{audio_stream_index}")
-    .run(quiet=True, overwrite_output=True)  
+    .run(overwrite_output=True)  
 )
