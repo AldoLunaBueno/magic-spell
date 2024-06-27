@@ -1,5 +1,7 @@
 from typing import Tuple, List
 from faster_whisper.transcribe import Word
+from itertools import accumulate
+from operator import add
 
 puncts = ".,;:?!"
 start_words = [" a", " an", " the", " and", " with", " by", " across", " within", " toward", " thereby", " between", " above", " below", " for", " from"
@@ -36,7 +38,8 @@ def smart_split(text: str, words_list: List[Word], line_limit: int):
 def split_by_length(text: str, relative_lengths: List[int]) -> List[str]:
     total = sum(relative_lengths)
     lengths = [int(len(text)*r/total) for r in relative_lengths]
-    split_points = [text.find(" ", length) for length in lengths[:-1]]
+    accum_lengths = list(accumulate(lengths, add))
+    split_points = [text.find(" ", length) for length in accum_lengths[:-1]]
     splitted_text = [text[i:j].lstrip() for i,j in zip([0]+split_points, split_points+[None])]
     return splitted_text
 

@@ -4,7 +4,6 @@ import transcriber
 import translator
 import subtitle_loader as subloader
 import srt_maker
-import splitter
 import formater
 from faster_whisper.transcribe import Segment, Word
 
