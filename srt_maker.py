@@ -14,7 +14,7 @@ def to_srt(lines: Tuple[List[float], List[float], List[str]], language: str, out
     #     srt_content.append(str_entry)
 
     srt_content = "\n".join(srt_content)
-    srt_file = f"{output_file_name}.{language}.srt"
+    srt_file = f"{language}.srt"
     with open(srt_file, "w", encoding="utf-8") as f:
         f.write(srt_content)
 

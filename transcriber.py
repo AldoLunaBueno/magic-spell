@@ -5,7 +5,7 @@ from faster_whisper.transcribe import Word
 # tiny distil-small.en small.en 
 model_size = "small"
 
-def transcribe(input_file, audio_file) -> Tuple[Tuple[List[float], List[float], List[str], List[List[Word]]], str]:
+def transcribe(input_file: str, hotwords_file: str, audio_file: str) -> Tuple[Tuple[List[float], List[float], List[str], List[List[Word]]], str]:
 
     name, dot, _ = input_file.rpartition(".")
     srt_file = f"{name}_with_subtitles.srt" 
@@ -14,13 +14,16 @@ def transcribe(input_file, audio_file) -> Tuple[Tuple[List[float], List[float], 
 
     # Opciones de transcripción
     language = "en"
-    hotwords = "Asta Wizard King grimoire Yuno Hage Yami Sukehiro Luck Noelle Nozel Secre Mimosa Marie William Vangeance Mereoleona Julius Novachrono Sekke Bronzazza"
+
+    hotwords = ""
+    with open(hotwords_file, "r") as f:
+        hotwords = " ".join([line.strip() for line in f.readlines()])
     options = dict(
-        beam_size = 2,
-        length_penalty = 0.3,
+        beam_size = 3,
+        length_penalty = 0.2,
         hotwords = hotwords,
-        vad_filter = True,
-        vad_parameters = dict(min_silence_duration_ms=1500),
+        vad_filter = False,
+        #vad_parameters = dict(min_silence_duration_ms=1500),
         hallucination_silence_threshold = 0.2,
         language = language,
         word_timestamps=True,
